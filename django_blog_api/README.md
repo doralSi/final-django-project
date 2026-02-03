@@ -108,7 +108,17 @@ A complete RESTful API for a blog application built with Django REST Framework, 
    python manage.py runserver
    ```
 
-8. **Access the API**
+8. **(Optional) Seed database with sample data**
+   
+   The project includes an optional seed command to populate the database with sample data for testing. Without running it, the database remains empty after migrations.
+   
+   ```powershell
+   python manage.py seed_data
+   ```
+   
+   Creates sample users (admin/testuser), articles, and comments. Use `--clear` flag to reset data first.
+
+9. **Access the API**
    - API Base URL: `http://127.0.0.1:8000/api/`
    - Admin Panel: `http://127.0.0.1:8000/admin/`
 
