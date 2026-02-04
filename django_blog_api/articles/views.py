@@ -17,7 +17,7 @@ class ArticleListCreateView(generics.ListCreateAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     permission_classes = [IsStaffOrReadOnly]
-    search_fields = ['title', 'content', 'tags']
+    search_fields = ['title', 'content', 'tags', 'author__username']
     ordering_fields = ['created_at', 'title']
     ordering = ['-created_at']  # default ordering
     
