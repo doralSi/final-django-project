@@ -59,13 +59,14 @@ class CommentUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     def get_permissions(self):
         """
         Different permissions for different methods:
-        - GET: IsAuthenticated
+        - GET: AllowAny (consistent with article comments list)
         - PATCH/PUT: IsAuthenticated + IsOwner (owner only)
         - DELETE: IsAuthenticated + IsOwnerOrAdmin (owner or admin)
         """
+        if self.request.method == 'GET':
+            return [permissions.AllowAny()]
         if self.request.method in ['PATCH', 'PUT']:
             return [permissions.IsAuthenticated(), IsOwner()]
-        elif self.request.method == 'DELETE':
+        if self.request.method == 'DELETE':
             return [permissions.IsAuthenticated(), IsOwnerOrAdmin()]
-        # GET
-        return [permissions.IsAuthenticated()]
+        return super().get_permissions()
