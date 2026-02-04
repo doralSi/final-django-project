@@ -5,7 +5,7 @@ from rest_framework import generics, permissions
 from rest_framework.exceptions import NotFound
 from .models import Comment
 from .serializers import CommentSerializer
-from .permissions import IsStaffOnly
+from .permissions import IsStaffOnly, IsOwnerOrAdmin
 from articles.models import Article
 
 
@@ -47,10 +47,12 @@ class ArticleCommentListCreateView(generics.ListCreateAPIView):
         serializer.save(author=self.request.user, article=article)
 
 
-class CommentDestroyView(generics.DestroyAPIView):
+class CommentUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     """
-    DELETE: Delete a comment (admin only)
+    GET: Retrieve a comment
+    PATCH/PUT: Update a comment (owner or admin)
+    DELETE: Delete a comment (owner or admin)
     """
-    queryset = Comment.objects.all()
+    queryset = Comment.objects.select_related('author', 'article').all()
     serializer_class = CommentSerializer
-    permission_classes = [IsStaffOnly]
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrAdmin]
