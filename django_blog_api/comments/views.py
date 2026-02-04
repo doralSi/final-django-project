@@ -5,7 +5,7 @@ from rest_framework import generics, permissions
 from rest_framework.exceptions import NotFound
 from .models import Comment
 from .serializers import CommentSerializer
-from .permissions import IsStaffOnly, IsOwnerOrAdmin
+from .permissions import IsStaffOnly, IsOwner, IsOwnerOrAdmin
 from articles.models import Article
 
 
@@ -49,10 +49,23 @@ class ArticleCommentListCreateView(generics.ListCreateAPIView):
 
 class CommentUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     """
-    GET: Retrieve a comment
-    PATCH/PUT: Update a comment (owner or admin)
+    GET: Retrieve a comment (authenticated users)
+    PATCH/PUT: Update a comment (owner only)
     DELETE: Delete a comment (owner or admin)
     """
     queryset = Comment.objects.select_related('author', 'article').all()
     serializer_class = CommentSerializer
-    permission_classes = [permissions.IsAuthenticated, IsOwnerOrAdmin]
+    
+    def get_permissions(self):
+        """
+        Different permissions for different methods:
+        - GET: IsAuthenticated
+        - PATCH/PUT: IsAuthenticated + IsOwner (owner only)
+        - DELETE: IsAuthenticated + IsOwnerOrAdmin (owner or admin)
+        """
+        if self.request.method in ['PATCH', 'PUT']:
+            return [permissions.IsAuthenticated(), IsOwner()]
+        elif self.request.method == 'DELETE':
+            return [permissions.IsAuthenticated(), IsOwnerOrAdmin()]
+        # GET
+        return [permissions.IsAuthenticated()]

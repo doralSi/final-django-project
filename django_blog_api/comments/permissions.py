@@ -13,14 +13,24 @@ class IsStaffOnly(permissions.BasePermission):
         return request.user and request.user.is_authenticated and request.user.is_staff
 
 
-class IsOwnerOrAdmin(permissions.BasePermission):
+class IsOwner(permissions.BasePermission):
     """
-    Permission to allow comment owners or admin users to modify/delete comments.
+    Permission to allow only the comment owner to edit.
     """
     
     def has_object_permission(self, request, view, obj):
-        # Admin users can do anything
+        # Only the owner can edit
+        return obj.author == request.user
+
+
+class IsOwnerOrAdmin(permissions.BasePermission):
+    """
+    Permission to allow comment owners or admin users to delete comments.
+    """
+    
+    def has_object_permission(self, request, view, obj):
+        # Admin users can delete
         if request.user.is_staff:
             return True
-        # Owner can modify their own comment
+        # Owner can delete their own comment
         return obj.author == request.user
