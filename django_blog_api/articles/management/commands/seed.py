@@ -51,12 +51,12 @@ class Command(BaseCommand):
         else:
             self.stdout.write('Test user already exists')
 
-        # Article data
+        # Article data (exactly 2 articles)
         articles_data = [
             {
                 'title': 'Getting Started with Django REST Framework',
                 'content': '''Django REST Framework is a powerful toolkit for building Web APIs. 
-                
+
 This comprehensive guide will walk you through the essential concepts including serializers, viewsets, routers, and authentication. Whether you are a beginner or experienced developer, this tutorial covers everything you need to know to build robust REST APIs with Django.
 
 Key topics covered:
@@ -106,7 +106,7 @@ Follow these practices to ensure your Django application performs optimally with
                 created_articles.append(article)
                 self.stdout.write(f'Article already exists: {article.title}')
 
-        # Create comments for each article
+        # Create exactly 2 comments per article (from testuser only)
         for article in created_articles:
             # Check how many comments already exist for this article
             existing_comments = Comment.objects.filter(article=article).count()
@@ -115,14 +115,14 @@ Follow these practices to ensure your Django application performs optimally with
                 self.stdout.write(f'Article "{article.title}" already has {existing_comments} comments')
                 continue
 
-            # Create comments from testuser
+            # Create exactly 2 comments from testuser per article
             comments_from_testuser = [
                 f'Great article! This really helped me understand {article.title.split()[0].lower()}.',
                 f'Thanks for sharing this detailed guide. The examples are very clear and practical.',
             ]
 
             for i, content in enumerate(comments_from_testuser):
-                # Only create if we need more comments
+                # Only create if we need more comments (to reach exactly 2)
                 if existing_comments + i < 2:
                     Comment.objects.create(
                         article=article,
@@ -130,15 +130,6 @@ Follow these practices to ensure your Django application performs optimally with
                         content=content
                     )
                     self.stdout.write(f'Created comment by testuser on: {article.title}')
-
-            # Optionally add a comment from admin
-            if existing_comments < 3:
-                Comment.objects.create(
-                    article=article,
-                    author=admin,
-                    content='Thank you for the positive feedback! Glad it was helpful.',
-                )
-                self.stdout.write(f'Created comment by admin on: {article.title}')
 
         # Print summary
         total_users = User.objects.count()
