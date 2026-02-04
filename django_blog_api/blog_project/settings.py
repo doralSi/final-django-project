@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'corsheaders',
     
     # Local apps
+    'blog_project',
     'users',
     'articles',
     'comments',
