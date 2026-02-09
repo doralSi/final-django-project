@@ -63,9 +63,16 @@ CREATE DATABASE blog_db;
 
 ## ⚙️ הגדרת משתני סביבה
 
-### Backend (Django)
+**חשוב מאוד:** יש ליצור 2 קבצי `.env` לפני הרצת הפרויקט.
 
-צור קובץ `.env` בתוך תיקיית `django_blog_api/` עם התוכן הבא:
+### Backend (Django) - קובץ .env ראשון
+
+**נתיב:** `django_blog_api/.env`
+
+**הוראות:**
+1. פתח את תיקיית `django_blog_api`
+2. צור קובץ חדש בשם `.env` (בדיוק כך, עם נקודה בהתחלה)
+3. העתק את התוכן הבא **בדיוק כמו שהוא** לתוך הקובץ:
 
 ```dotenv
 # Django Settings
@@ -87,14 +94,28 @@ DB_PORT=5432
 CORS_ALLOWED_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
 ```
 
-**שים לב:** עדכן את `DB_PASSWORD` לסיסמת PostgreSQL שלך.
+**הערה:** אם סיסמת ה-PostgreSQL שלך שונה מ-`8888`, שנה את `DB_PASSWORD=8888` לסיסמה שלך.
 
-### Frontend (React)
+### Frontend (React) - קובץ .env שני
 
-צור קובץ `.env` בתוך תיקיית `client/` עם התוכן הבא:
+**נתיב:** `client/.env`
+
+**הוראות:**
+1. פתח את תיקיית `client`
+2. צור קובץ חדש בשם `.env` (בדיוק כך, עם נקודה בהתחלה)
+3. העתק את התוכן הבא **בדיוק כמו שהוא** לתוך הקובץ:
 
 ```dotenv
 VITE_API_BASE_URL=http://127.0.0.1:8000/api
+```
+
+**לאחר יצירת שני הקבצים, המבנה צריך להיראות כך:**
+```
+final-Django-project/
+├── django_blog_api/
+│   └── .env          ← קובץ ראשון
+└── client/
+    └── .env          ← קובץ שני
 ```
 
 ---
