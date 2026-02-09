@@ -60,6 +60,22 @@ class Command(BaseCommand):
         else:
             self.stdout.write('  - Test user already exists')
 
+        # Regular user for testing
+        reguser, created = User.objects.get_or_create(
+            username='reg',
+            defaults={
+                'email': 'reg@example.com',
+                'first_name': 'Regular',
+                'last_name': 'User'
+            }
+        )
+        if created:
+            reguser.set_password('reg!1234')
+            reguser.save()
+            self.stdout.write(self.style.SUCCESS('✓ Regular user (reg) created'))
+        else:
+            self.stdout.write('  - Regular user (reg) already exists')
+
         # Sample articles data
         articles_data = [
             {
@@ -102,6 +118,26 @@ class Command(BaseCommand):
                 'content': 'Optimize your SQL queries for better performance. Learn about indexes, query plans, and database optimization techniques.',
                 'tags': 'sql,database,performance,optimization'
             },
+            {
+                'title': 'React Hooks Deep Dive',
+                'content': 'Understanding React Hooks from basics to advanced patterns. Learn useState, useEffect, useContext, and custom hooks with real-world examples.',
+                'tags': 'react,hooks,frontend,javascript'
+            },
+            {
+                'title': 'Microservices Architecture',
+                'content': 'Building scalable applications with microservices. This article covers service design, communication patterns, and deployment strategies.',
+                'tags': 'microservices,architecture,backend,scalability'
+            },
+            {
+                'title': 'CI/CD Best Practices',
+                'content': 'Implementing continuous integration and deployment pipelines. Learn about automated testing, deployment strategies, and monitoring.',
+                'tags': 'cicd,devops,automation,testing'
+            },
+            {
+                'title': 'TypeScript for JavaScript Developers',
+                'content': 'Transition from JavaScript to TypeScript smoothly. Covers type systems, interfaces, generics, and advanced TypeScript patterns.',
+                'tags': 'typescript,javascript,programming,types'
+            },
         ]
 
         self.stdout.write('Creating articles...')
@@ -126,9 +162,25 @@ class Command(BaseCommand):
             comments_data = [
                 {'article_idx': 0, 'author': testuser, 'content': 'Great tutorial! Very helpful for beginners.'},
                 {'article_idx': 0, 'author': admin, 'content': 'Thanks for the feedback!'},
+                {'article_idx': 0, 'author': reguser, 'content': 'I learned a lot from this article!'},
                 {'article_idx': 1, 'author': testuser, 'content': 'This helped me set up PostgreSQL correctly.'},
+                {'article_idx': 1, 'author': reguser, 'content': 'Very clear explanations, thank you!'},
                 {'article_idx': 2, 'author': testuser, 'content': 'These best practices are excellent.'},
                 {'article_idx': 3, 'author': admin, 'content': 'JavaScript has evolved so much in recent years.'},
+                {'article_idx': 3, 'author': reguser, 'content': 'ES6 features are amazing!'},
+                # תגובות לכתבות החדשות
+                {'article_idx': 8, 'author': testuser, 'content': 'React Hooks changed the way I write components!'},
+                {'article_idx': 8, 'author': admin, 'content': 'Totally agree! Hooks are game changers.'},
+                {'article_idx': 8, 'author': reguser, 'content': 'Can you write more about custom hooks?'},
+                {'article_idx': 9, 'author': testuser, 'content': 'Microservices can be complex but worth it for large projects.'},
+                {'article_idx': 9, 'author': admin, 'content': 'Exactly! Start simple and scale as needed.'},
+                {'article_idx': 9, 'author': reguser, 'content': 'What about service discovery?'},
+                {'article_idx': 10, 'author': testuser, 'content': 'We implemented CI/CD last month, amazing results!'},
+                {'article_idx': 10, 'author': admin, 'content': 'Great to hear! Which tools did you use?'},
+                {'article_idx': 10, 'author': reguser, 'content': 'GitHub Actions and Docker mainly.'},
+                {'article_idx': 11, 'author': testuser, 'content': 'TypeScript has a learning curve but improves code quality.'},
+                {'article_idx': 11, 'author': admin, 'content': 'The type safety is worth the initial investment!'},
+                {'article_idx': 11, 'author': reguser, 'content': 'Moving our project to TypeScript next month!'},
             ]
 
             created_comments = 0
@@ -152,4 +204,5 @@ class Command(BaseCommand):
         self.stdout.write(f'Comments: {Comment.objects.count()}')
         self.stdout.write('\nCredentials:')
         self.stdout.write('  Admin: admin / admin123')
-        self.stdout.write('  User: testuser / testpass123')
+        self.stdout.write('  Regular User: reg / reg!1234')
+        self.stdout.write('  Test User: testuser / testpass123')

@@ -13,7 +13,7 @@ const CommentItem = ({ comment, onUpdate, onDelete }) => {
 
   const isOwner = user?.id === comment.author;
   const canEdit = isOwner;
-  const canDelete = isOwner || isAdmin;
+  const canDelete = isOwner || isAdmin;  // Owner or admin can delete
 
   const handleEdit = async () => {
     if (!editContent.trim()) {
@@ -57,7 +57,7 @@ const CommentItem = ({ comment, onUpdate, onDelete }) => {
   return (
     <div className="card" style={{ marginBottom: 'var(--spacing-md)' }}>
       <div className="meta">
-        {comment.author_username || 'Anonymous'} • {formatDate(comment.created_at)}
+        {comment.author || 'Anonymous'} • {formatDate(comment.created_at)}
       </div>
 
       {error && <Alert type="error" message={error} onClose={() => setError('')} />}

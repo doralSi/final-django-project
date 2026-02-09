@@ -16,6 +16,7 @@ const Register = () => {
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -82,16 +83,45 @@ const Register = () => {
             disabled={loading || success}
           />
 
-          <TextInput
-            label="Password"
-            name="password"
-            type="password"
-            value={formData.password}
-            onChange={handleChange}
-            error={errors.password?.[0]}
-            required
-            disabled={loading || success}
-          />
+          <div className="form-group">
+            <label htmlFor="password" className="form-label">
+              Password
+              <span style={{ color: 'var(--error-red)' }}> *</span>
+            </label>
+            <div style={{ position: 'relative' }}>
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                value={formData.password}
+                onChange={handleChange}
+                required
+                disabled={loading || success}
+                className={`form-input ${errors.password ? 'error' : ''}`}
+                style={{ paddingRight: '2.5rem' }}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                style={{
+                  position: 'absolute',
+                  right: '0.5rem',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: '0.25rem',
+                  fontSize: '1.25rem',
+                  color: 'var(--text-secondary)',
+                }}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? '👁️' : '👁️‍🗨️'}
+              </button>
+            </div>
+            {errors.password && <div className="form-error">{errors.password[0]}</div>}
+          </div>
 
           <Button type="submit" block disabled={loading || success}>
             {loading ? 'Registering...' : 'Register'}
